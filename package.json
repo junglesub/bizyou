@@ -14,11 +14,15 @@
     "@heroicons/react": "^2.2.0",
     "@react-spring/web": "^9.5.5",
     "@tailwindcss/vite": "^4.1.11",
+    "aos": "^2.3.4",
+    "framer-motion": "^12.23.0",
+    "lottie-react": "^2.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^7.6.3",
     "react-tinder-card": "^1.6.4",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "typed.js": "^2.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
