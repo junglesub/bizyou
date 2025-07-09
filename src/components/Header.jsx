@@ -4,7 +4,7 @@ function Header() {
   return (
     <header className="w-full flex items-center justify-between px-6 py-4 bg-white shadow-md">
       <h1 className="text-2xl font-bold text-gray-800">Dexton</h1>
-      <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+      {/* <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -20,7 +20,7 @@ function Header() {
           />
         </svg>
         History
-      </button>
+      </button> */}
     </header>
   );
 }
