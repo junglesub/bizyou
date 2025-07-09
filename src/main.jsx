@@ -14,7 +14,7 @@ import PosterPage from "./pages/PosterPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <LoginPage />,
   },
   {
     path: "/home",
