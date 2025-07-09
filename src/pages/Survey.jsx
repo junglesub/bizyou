@@ -126,7 +126,7 @@ function Survey() {
 
   const navigate = useNavigate();
   if (step >= questions.length) {
-    navigate("/survey-result");
+    navigate("/result");
     return null;
   }
 
