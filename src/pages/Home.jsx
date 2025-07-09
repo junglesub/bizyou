@@ -64,11 +64,13 @@ const initialCompanies = [
 
 function Home() {
   const [companies, setCompanies] = useState(
-    initialCompanies.map((c) => ({ ...c, hidden: false }))
+    initialCompanies.map((c) => ({ ...c, hidden: false, liked: false }))
   );
   const [currentIndex, setCurrentIndex] = useState(initialCompanies.length - 1);
   const [showMatch, setShowMatch] = useState(false);
   const [lastDirection, setLastDirection] = useState();
+  const [showLikedModal, setShowLikedModal] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const currentIndexRef = useRef(currentIndex);
   const childRefs = useMemo(
     () =>
@@ -89,6 +91,9 @@ function Home() {
   const swiped = (direction, nameToDelete, idx) => {
     setLastDirection(direction);
     if (direction === "right") {
+      setCompanies((prev) =>
+        prev.map((c, i) => (i === idx ? { ...c, liked: true } : c))
+      );
       if (idx === 0) {
         setShowMatch(true);
       } else {
@@ -176,6 +181,12 @@ function Home() {
                 Skip
               </button>
               <button
+                className="flex-1 py-4 rounded-2xl bg-blue-500 text-white text-xl font-bold shadow hover:bg-blue-600 transition-colors"
+                onClick={() => setShowLikedModal(true)}
+              >
+                관심 기업 ({companies.filter((c) => c.liked).length})
+              </button>
+              <button
                 className="flex-1 py-4 rounded-2xl bg-green-500 text-white text-xl font-bold shadow hover:bg-green-600 transition-colors"
                 onClick={() => swipe("right")}
                 disabled={!canSwipe}
@@ -185,6 +196,86 @@ function Home() {
             </div>
           )}
         </div>
+        {/* 관심 기업 모달 */}
+        {showLikedModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full flex flex-col items-center relative">
+              <button
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold"
+                onClick={() => setShowLikedModal(false)}
+                aria-label="닫기"
+              >
+                ×
+              </button>
+              <h2 className="text-2xl font-bold mb-4 text-blue-600">
+                관심 기업 목록
+              </h2>
+              {companies.filter((c) => c.liked).length === 0 ? (
+                <div className="text-gray-500 text-lg">
+                  아직 선택한 기업이 없습니다.
+                </div>
+              ) : (
+                <>
+                  <ul className="w-full space-y-4 mb-6">
+                    {companies
+                      .filter((c) => c.liked)
+                      .map((c) => (
+                        <li
+                          key={c.name}
+                          className="flex items-center gap-4 p-3 rounded-xl bg-blue-50"
+                        >
+                          <img
+                            src={c.logo}
+                            alt={c.name}
+                            className="w-12 h-12 rounded-full object-contain border-2 border-blue-200"
+                          />
+                          <div>
+                            <div className="font-bold text-blue-800">
+                              {c.name}
+                            </div>
+                            <div className="text-gray-600 text-sm">
+                              {c.description}
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                  <button
+                    className="w-full py-3 rounded-xl bg-green-500 text-white text-lg font-semibold hover:bg-green-600 transition-colors"
+                    onClick={() => setShowMap(true)}
+                  >
+                    기업들 위치 보기
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+        {/* 지도 모달 */}
+        {showMap && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+            <div className="bg-white rounded-3xl shadow-2xl p-6 max-w-lg w-full flex flex-col items-center relative">
+              <button
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold"
+                onClick={() => setShowMap(false)}
+                aria-label="닫기"
+              >
+                ×
+              </button>
+              <h2 className="text-xl font-bold mb-4 text-green-600">
+                기업 부스 위치 안내
+              </h2>
+              <img
+                src="/map.png"
+                alt="부스 지도"
+                className="w-full max-w-xs md:max-w-md rounded-xl border mb-2"
+              />
+              <span className="text-gray-500 text-sm">
+                현장 안내도를 참고하세요
+              </span>
+            </div>
+          </div>
+        )}
         {showMatch && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
             <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-xs w-full flex flex-col items-center">

@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import Home from "./pages/Home.jsx";
 import PosterPage from "./pages/PosterPage.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: "/poster",
     element: <PosterPage />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPage />,
   },
 ]);
 
