@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 const questions = [
   // Part 1: 관심 산업군 (객관식)
@@ -124,31 +124,10 @@ function Survey() {
   };
   const handlePrev = () => setStep((s) => Math.max(0, s - 1));
 
-  // 결과 화면 예시
+  const navigate = useNavigate();
   if (step >= questions.length) {
-    // 실제 추천 로직은 별도 구현 필요
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-        <Header />
-        <div className="bg-white shadow-xl p-8 w-full flex flex-col items-center flex-grow">
-          <h2 className="text-2xl font-bold mb-2 text-blue-700">추천 결과</h2>
-          <div className="mb-4 text-center text-lg">
-            당신의 유형:{" "}
-            <span className="font-semibold text-green-600">혁신 지향형</span>
-          </div>
-          <div className="mb-6 text-gray-700 text-center">
-            추천 부스: 포스코케미칼, 포항산업과학연구원(RIST), 나노소재 스타트업
-            등
-          </div>
-          <Link
-            to="/home"
-            className="w-full py-3 rounded-xl bg-blue-600 text-white text-lg font-semibold hover:bg-blue-700 transition-colors text-center block"
-          >
-            나에게 맞는 기업 추천받기
-          </Link>
-        </div>
-      </div>
-    );
+    navigate("/survey-result");
+    return null;
   }
 
   return (
