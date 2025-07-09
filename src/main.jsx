@@ -7,6 +7,8 @@ import Home from "./pages/home.jsx";
 import Survey from "./pages/survey.jsx";
 import SurveyResult from "./pages/SurveyResult.jsx";
 import LandPage from "./pages/LandPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
   {
     path: "/land",
     element: <LandPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
 ]);
 
