@@ -113,7 +113,7 @@ function LoginPage({
   // Success CTA
   const handleStartSurvey = () => {
     // TODO: router push to survey, pass sessionToken if needed
-    window.location.href = "/survey";
+    window.location.href = "/register";
   };
 
   return (
@@ -141,7 +141,7 @@ function LoginPage({
                 placeholder="010-1234-5678"
                 className="w-full text-center text-xl py-3 px-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all font-mono tracking-widest bg-gray-50"
                 inputMode="numeric"
-                autoFocus
+                // autoFocus
               />
             </div>
             <motion.button

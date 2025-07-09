@@ -86,7 +86,7 @@ function LandPage() {
           whileHover={{ scale: 1.05, boxShadow: "0 0 16px #60a5fa" }}
           whileTap={{ scale: 0.96 }}
           className="mt-6 w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xl font-bold shadow-lg transition-all flex flex-col items-center gap-1"
-          onClick={() => (window.location.href = "/survey")}
+          onClick={() => (window.location.href = "/login")}
         >
           🎯 나에게 맞는 부스 찾기 시작하기
           <span className="text-sm font-normal text-blue-100">

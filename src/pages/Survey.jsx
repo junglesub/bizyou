@@ -74,7 +74,48 @@ const questions = [
 function Survey() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [aiStep, setAiStep] = useState(0);
+  const [aiDone, setAiDone] = useState(false);
+  const [showSkipModal, setShowSkipModal] = useState(false);
   const q = questions[step];
+  // 건너뛰기 핸들러
+  const handleSkip = () => {
+    setShowSkipModal(true);
+  };
+  const handleSkipConfirm = () => {
+    setShowSkipModal(false);
+    // AI 분석 모달 실행 후 /result로 이동
+    setShowModal(true);
+    setAiStep(0);
+    setAiDone(false);
+    let stepIdx = 0;
+    const interval = setInterval(() => {
+      stepIdx++;
+      if (stepIdx < AI_MESSAGES.length) {
+        setAiStep(stepIdx);
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          setAiDone(true);
+        }, 600);
+      }
+    }, AI_INTERVAL);
+  };
+  const handleSkipCancel = () => {
+    setShowSkipModal(false);
+  };
+
+  // AI 메시지 시퀀스
+  const AI_MESSAGES = [
+    "AI가 설문 응답을 분석 중...",
+    "회사/관심 분야를 바탕으로 부스 후보를 추출 중...",
+    "최적의 추천을 위해 데이터베이스를 탐색 중...",
+    "유사 참가자/트렌드 데이터를 참고하는 중...",
+    "곧 결과가 준비됩니다!",
+  ];
+  const AI_DURATION = 4000; // 총 4초
+  const AI_INTERVAL = AI_DURATION / AI_MESSAGES.length;
 
   // 다중 선택
   const handleMulti = (val) => {
@@ -125,8 +166,32 @@ function Survey() {
   const handlePrev = () => setStep((s) => Math.max(0, s - 1));
 
   const navigate = useNavigate();
-  if (step >= questions.length) {
+  // 마지막 페이지에서 계속하기 클릭 시 AI 모달
+  const handleFinalNext = () => {
+    setShowModal(true);
+    setAiStep(0);
+    setAiDone(false);
+    let stepIdx = 0;
+    const interval = setInterval(() => {
+      stepIdx++;
+      if (stepIdx < AI_MESSAGES.length) {
+        setAiStep(stepIdx);
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          setAiDone(true);
+        }, 600);
+      }
+    }, AI_INTERVAL);
+  };
+
+  const handleGoNext = () => {
+    setShowModal(false);
     navigate("/result");
+  };
+
+  if (step >= questions.length) {
+    // 실제로는 모달에서 완료 버튼 누를 때 이동
     return null;
   }
 
@@ -204,7 +269,7 @@ function Survey() {
               </>
             )}
           </div>
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-between mt-8 items-center gap-2">
             <button
               className="px-4 py-2 rounded bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300"
               onClick={handlePrev}
@@ -212,6 +277,14 @@ function Survey() {
             >
               이전
             </button>
+            <button
+              className="px-4 py-2 rounded bg-gray-100 text-gray-500 font-semibold border border-gray-300 hover:bg-gray-200 ml-auto"
+              type="button"
+              onClick={handleSkip}
+            >
+              건너뛰기
+            </button>
+            {/* 마지막 페이지: AI 모달로 전환 */}
             {q.type === "multi" && (
               <button
                 className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-400"
@@ -221,7 +294,7 @@ function Survey() {
                 다음
               </button>
             )}
-            {q.type === "scales" && (
+            {q.type === "scales" && step !== questions.length - 1 && (
               <button
                 className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-400"
                 onClick={handleScalesNext}
@@ -235,7 +308,81 @@ function Survey() {
                 다음
               </button>
             )}
+            {/* 마지막 척도형 페이지: AI 분석 모달 */}
+            {q.type === "scales" && step === questions.length - 1 && (
+              <button
+                className="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:text-gray-400"
+                onClick={handleFinalNext}
+                disabled={
+                  !(
+                    Array.isArray(answers[step]) &&
+                    answers[step].every((v) => !!v)
+                  )
+                }
+              >
+                계속하기
+              </button>
+            )}
           </div>
+          {/* 건너뛰기 확인 모달 */}
+          {showSkipModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-xs w-full flex flex-col items-center">
+                <div className="text-2xl mb-4">⚠️</div>
+                <div className="text-base font-semibold text-center mb-4">
+                  일부 문항을 건너뛰면
+                  <br />
+                  추천 정확도가 낮아질 수 있습니다.
+                  <br />
+                  그래도 계속하시겠습니까?
+                </div>
+                <div className="flex gap-3 w-full mt-2">
+                  <button
+                    className="flex-1 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300"
+                    onClick={handleSkipCancel}
+                  >
+                    취소
+                  </button>
+                  <button
+                    className="flex-1 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700"
+                    onClick={handleSkipConfirm}
+                  >
+                    건너뛰기
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* AI 분석 모달 */}
+          {showModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-xs w-full flex flex-col items-center">
+                <div className="text-3xl mb-4 animate-spin-slow">🤖</div>
+                <div className="text-base font-semibold text-center min-h-[2.5rem] mb-2 animate-fade-in">
+                  {AI_MESSAGES[aiStep]}
+                </div>
+                {!aiDone && (
+                  <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden my-4">
+                    <div
+                      className="h-2 bg-blue-500 rounded-full"
+                      style={{
+                        width: `${((aiStep + 1) / AI_MESSAGES.length) * 100}%`,
+                        transition: `width ${AI_INTERVAL}ms linear`,
+                      }}
+                    />
+                  </div>
+                )}
+                {aiDone && (
+                  <button
+                    className="mt-4 w-full py-3 rounded-lg text-white font-bold text-base bg-green-500 hover:bg-green-600 shadow-md transition-all"
+                    onClick={handleGoNext}
+                  >
+                    🎉 분석 완료! 결과 보기
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
