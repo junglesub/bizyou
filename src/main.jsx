@@ -9,6 +9,7 @@ import LandPage from "./pages/LandPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import Home from "./pages/Home.jsx";
+import PosterPage from "./pages/PosterPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/poster",
+    element: <PosterPage />,
   },
 ]);
 
