@@ -4,22 +4,61 @@ import Header from "../components/Header";
 
 const companies = [
   {
-    logo: "https://logo.clearbit.com/google.com",
-    name: "Google",
-    description: "글로벌 IT 기업, 검색엔진 및 다양한 서비스를 제공.",
-    reason: "AI/Tech 분야에 관심이 많아 추천드려요!",
+    logo: "https://logo.clearbit.com/posco.co.kr",
+    name: "포스코 (POSCO)",
+    description: "대한민국을 대표하는 글로벌 No.1 철강 기업.",
+    reason:
+      "지아님, 졸업 논문 주제인 '지속가능한 미래'에 필수적인 수소환원제철(HyREX) 기술을 직접 확인할 기회예요. 미래 커리어의 목표로 삼기에도 최고의 기업이죠.",
   },
   {
-    logo: "https://logo.clearbit.com/naver.com",
-    name: "Naver",
-    description: "대한민국 대표 포털 및 IT 서비스 기업.",
-    reason: "국내 IT 트렌드와 혁신을 경험할 수 있어요!",
+    logo: "https://logo.clearbit.com/hyundai-steel.com",
+    name: "현대제철 (Hyundai Steel)",
+    description: "자동차 강판과 H형강에 강점을 가진 글로벌 철강 기업.",
+    reason:
+      "친환경 전기로 분야의 선두주자라 지아님의 관심사와 잘 맞아요. 특히 미래차에 적용될 초고장력강과 경량화 소재는 논문에도 좋은 영감을 줄 거예요.",
   },
   {
-    logo: "https://logo.clearbit.com/samsung.com",
-    name: "Samsung",
-    description: "글로벌 전자제품 및 반도체 선도 기업.",
-    reason: "글로벌 무대에서 일하고 싶다면 추천!",
+    logo: "https://logo.clearbit.com/dongkuk.co.kr",
+    name: "동국제강 (Dongkuk Steel)",
+    description: "국내 최초 민간 철강회사이자 컬러강판 시장의 강자.",
+    reason:
+      "금속 소재가 어떻게 고부가가치 디자인 제품으로 재탄생하는지 보고 싶지 않으세요? '소재의 심미성' 파트를 논문에 추가할 아이디어를 얻을 수 있을 거예요.",
+  },
+  {
+    logo: "https://logo.clearbit.com/seah.co.kr",
+    name: "세아제강 (SeAH Steel)",
+    description: "세계적인 경쟁력을 갖춘 강관 전문 제조 기업.",
+    reason:
+      "지아님이 관심 있는 '지속가능성'이 해상풍력 같은 신재생에너지로 구현될 때, 세아제강의 강관이 어떤 역할을 하는지 직접 확인하면 논문이 훨씬 깊어질 거예요.",
+  },
+  {
+    logo: "https://logo.clearbit.com/poongsan.co.kr",
+    name: "풍산 (Poongsan)",
+    description: "신동(구리 및 구리합금)과 방위산업 분야의 글로벌 리더.",
+    reason:
+      "신소재공학도로서 전기차, 반도체의 핵심인 구리 합금 기술의 끝을 볼 수 있는 곳이에요. 기초 소재의 중요성을 다시 한번 깨닫게 될 겁니다.",
+  },
+  {
+    logo: "https://logo.clearbit.com/tccsteel.com",
+    name: "TCC스틸 (TCC Steel)",
+    description: "이차전지 원통형 캔 소재인 니켈도금강판 분야의 숨은 강자.",
+    reason:
+      "지아님이 목표하는 이차전지 분야의 '알짜' 기업이에요. 배터리의 안전성을 책임지는 핵심 소재 기술을 파악하고 면접에서 어필할 포인트를 찾아보세요.",
+  },
+  {
+    logo: "https://logo.clearbit.com/ecopro.co.kr",
+    name: "에코프로 (Ecopro)",
+    description:
+      "세계 1위 하이니켈 양극재 기술력을 보유한 이차전지 소재 선도 기업.",
+    reason:
+      "이차전지 소재 분야 취업을 꿈꾼다면 여긴 성지나 다름없죠. 세계 1위 양극재 기술이 어떤 건지 직접 보고, 미래 엔지니어로서의 꿈을 키워보세요!",
+  },
+  {
+    logo: "https://logo.clearbit.com/doosanenerbility.com",
+    name: "두산에너빌리티 (Doosan Enerbility)",
+    description: "원자력, 화력, 가스터빈 등 에너지 플랜트 분야의 글로벌 리더.",
+    reason:
+      "SMR, 수소터빈 같은 차세대 에너지 기술에 필요한 극한 환경 소재들을 볼 수 있어요. 지아님의 전공이 미래 에너지 산업에 어떻게 기여할지 그려볼 수 있는 곳이죠.",
   },
 ];
 
@@ -87,17 +126,17 @@ function Home() {
       <main className="px-0 py-0 relative h-full">
         <div className="flex flex-col justify-between h-full">
           {!showMatch && (
-            <div className="top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10 mt-3">
+            <div className="top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10 mt-3 ">
               {companies.map((company, index) => (
                 <TinderCard
                   ref={childRefs[index]}
-                  className="absolute w-full h-[80vh] max-w-md mx-auto"
+                  className="absolute w-full h-[80vh] max-w-md mx-auto "
                   key={company.name}
                   onSwipe={(dir) => swiped(dir, company.name, index)}
                   onCardLeftScreen={() => outOfFrame(company.name, index)}
                   preventSwipe={["up", "down"]}
                 >
-                  <div className="w-full h-full bg-white rounded-3xl shadow-2xl flex flex-col items-center justify-center p-6 mb-10">
+                  <div className="w-full h-full bg-white rounded-3xl border border-zinc-200 flex flex-col items-center justify-center p-6 mb-10">
                     <img
                       src={company.logo}
                       alt={company.name}
