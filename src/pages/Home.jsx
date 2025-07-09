@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef } from "react";
 import TinderCard from "react-tinder-card";
 import Header from "../components/Header";
 
-const companies = [
+const initialCompanies = [
   {
     logo: "https://logo.clearbit.com/posco.co.kr",
     name: "포스코 (POSCO)",
@@ -63,13 +63,16 @@ const companies = [
 ];
 
 function Home() {
-  const [currentIndex, setCurrentIndex] = useState(companies.length - 1);
+  const [companies, setCompanies] = useState(
+    initialCompanies.map((c) => ({ ...c, hidden: false }))
+  );
+  const [currentIndex, setCurrentIndex] = useState(initialCompanies.length - 1);
   const [showMatch, setShowMatch] = useState(false);
   const [lastDirection, setLastDirection] = useState();
   const currentIndexRef = useRef(currentIndex);
   const childRefs = useMemo(
     () =>
-      Array(companies.length)
+      Array(initialCompanies.length)
         .fill(0)
         .map(() => React.createRef()),
     []
@@ -101,7 +104,10 @@ function Home() {
   };
 
   const outOfFrame = (name, idx) => {
-    // 카드가 화면을 벗어났을 때 복원 방지
+    // 카드가 화면을 벗어났을 때 복원 방지 및 hidden 처리
+    setCompanies((prev) =>
+      prev.map((c, i) => (i === idx ? { ...c, hidden: true } : c))
+    );
     if (currentIndexRef.current >= idx && childRefs[idx].current) {
       childRefs[idx].current.restoreCard();
     }
@@ -127,33 +133,36 @@ function Home() {
         <div className="flex flex-col justify-between h-full">
           {!showMatch && (
             <div className="top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10 mt-3 ">
-              {companies.map((company, index) => (
-                <TinderCard
-                  ref={childRefs[index]}
-                  className="absolute w-full h-[80vh] max-w-md mx-auto "
-                  key={company.name}
-                  onSwipe={(dir) => swiped(dir, company.name, index)}
-                  onCardLeftScreen={() => outOfFrame(company.name, index)}
-                  preventSwipe={["up", "down"]}
-                >
-                  <div className="w-full h-full bg-white rounded-3xl border border-zinc-200 flex flex-col items-center justify-center p-6 mb-10">
-                    <img
-                      src={company.logo}
-                      alt={company.name}
-                      className="w-32 h-32 rounded-full object-contain mb-6 border-2 border-gray-200"
-                    />
-                    <h2 className="text-3xl font-bold mb-3 text-center">
-                      {company.name}
-                    </h2>
-                    <p className="text-gray-600 mb-6 text-center text-lg">
-                      {company.description}
-                    </p>
-                    <div className="bg-blue-50 text-blue-700 px-5 py-3 rounded-xl mb-8 text-center text-base font-medium">
-                      {company.reason}
-                    </div>
-                  </div>
-                </TinderCard>
-              ))}
+              {companies.map(
+                (company, index) =>
+                  !company.hidden && (
+                    <TinderCard
+                      ref={childRefs[index]}
+                      className="absolute w-full h-[80vh] max-w-md mx-auto "
+                      key={company.name}
+                      onSwipe={(dir) => swiped(dir, company.name, index)}
+                      onCardLeftScreen={() => outOfFrame(company.name, index)}
+                      preventSwipe={["up", "down"]}
+                    >
+                      <div className="w-full h-full bg-white rounded-3xl border border-zinc-200 flex flex-col items-center justify-center p-6 mb-10">
+                        <img
+                          src={company.logo}
+                          alt={company.name}
+                          className="w-32 h-32 rounded-full object-contain mb-6 border-2 border-gray-200"
+                        />
+                        <h2 className="text-3xl font-bold mb-3 text-center">
+                          {company.name}
+                        </h2>
+                        <p className="text-gray-600 mb-6 text-center text-lg">
+                          {company.description}
+                        </p>
+                        <div className="bg-blue-50 text-blue-700 px-5 py-3 rounded-xl mb-8 text-center text-base font-medium">
+                          {company.reason}
+                        </div>
+                      </div>
+                    </TinderCard>
+                  )
+              )}
             </div>
           )}
           {/* 버튼은 여전히 하단에 고정, 클릭 시 스와이프 트리거 */}
